@@ -29,7 +29,7 @@ const Feed: React.FC = () => {
     fetchPosts(); // Chama a função ao montar o componente
 
     // Busca o nome de usuário do token, se disponível
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('token');
     if (token) {
       // Decodifique o token aqui para obter o nome do usuário (se necessário)
       const user = JSON.parse(atob(token.split('.')[1]));
@@ -39,7 +39,7 @@ const Feed: React.FC = () => {
 
   const handlePostSubmit = async () => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('token');
       if (!token) {
         setError('Usuário não autenticado.');
         return;

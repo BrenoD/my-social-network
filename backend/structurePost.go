@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/gorilla/mux"
+	// "github.com/gorilla/mux"
 )
 
 // Estrutura de Postagem

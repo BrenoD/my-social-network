@@ -160,19 +160,20 @@ func routes() {
 	r.HandleFunc("/api/posts", getAllPostsHandler).Methods("GET")
 
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000"}, // Permite apenas esta origem
-		AllowCredentials: true,
-		AllowedMethods:   []string{"GET", "POST", "PUT"},
-	})
+        AllowedOrigins:   []string{"http://localhost:3000"},
+        AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
+        AllowedHeaders:   []string{"Authorization", "Content-Type"},
+        AllowCredentials: true,
+    })
 
-	handler := c.Handler(r)
+    handler := c.Handler(r)
 
-	srv := &http.Server{
-		Addr:         ":8000",
-		Handler:      handler,
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 10 * time.Second,
-	}
+    srv := &http.Server{
+        Handler:      handler,
+        Addr:         "0.0.0.0:8000",
+        WriteTimeout: 10 * time.Second,
+        ReadTimeout:  10 * time.Second,
+    }
 
 	fmt.Println("Servidor iniciado na porta 8000")
 	log.Fatal(srv.ListenAndServe())
