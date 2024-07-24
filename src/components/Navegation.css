@@ -1,0 +1,22 @@
+.leftNavegation {
+    background-color: rgb(195, 220, 252);
+    height: 100vh;
+    width: 27vw;
+}
+
+.grid {
+    padding-top: 20px;
+    display: grid;
+    grid-template-rows: auto;
+    row-gap: 40px;
+}
+
+.grid button {
+    text-align: left; 
+    width: 100%; 
+    padding: 10px;
+}
+
+button:hover {
+    background-color: rgb(228, 240, 255);
+}

@@ -1,0 +1,18 @@
+header {
+    background-color: rgb(45, 74, 128);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 60px;
+    color: aliceblue;
+    padding: 20px;
+}
+
+img {
+    height: 50px;
+    width: 140px;
+}
+
+a {
+    padding: 10px;
+}
