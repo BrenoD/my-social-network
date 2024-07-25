@@ -127,7 +127,7 @@ const Feed: React.FC = () => {
         {posts.length > 0 ? (
           posts.map((post) => (
             <div key={post.id} className="post">
-              <p><strong>Usuário:</strong> {post.username}</p>
+              <p><strong>{post.username}</strong></p>
               <p><strong>Hora:</strong> {new Date(post.createdAt).toLocaleString()}</p>
               <p><strong></strong> {post.content}</p>
             </div>

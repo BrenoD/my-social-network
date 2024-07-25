@@ -1,14 +1,19 @@
-.totalFeed {
-    background-color: rgb(223, 223, 223);
+
+
+.feedPost {
+    background-color: rgb(207, 207, 207);
     height: 12vh;
-    width: 100vw;
-    display: flex;
+    width: 80vw;
 }
 
 .h2-postage, .label-postage, #input-postage, .button-postage {
     display: flex;
     flex-direction: column;
     margin-left: 20px;
+}
+
+.contentFeed {
+    padding: 20px 0px 0px 20px;
 }
 
 #input-postage {

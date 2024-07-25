@@ -13,7 +13,7 @@ const Header: React.FC<HeaderProps> = () => (
       <Image src="/images/logoKartus.png" alt="logoKartus" width={300} height={300} />
     </aside>
     <div className="navegation">
-      <a href="feed">Feed</a>
+      <a href="/">Feed</a>
     </div>
     <div className="log">
       <a href="/Login">Login</a>
