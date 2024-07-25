@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
-
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 	"github.com/rs/cors"
@@ -24,6 +24,12 @@ type User struct {
 	CreatedAt string `json:"created_at"`
 }
 
+// Estrutura para Claims do JWT
+type Claims struct {
+	Username string `json:"username"`
+	jwt.StandardClaims
+}
+
 // Configurações do banco de dados
 const (
 	host     = "localhost"
@@ -32,6 +38,9 @@ const (
 	password = "brenodias10"
 	dbname   = "SocialNetwork"
 )
+
+// Configuração do JWT
+var jwtKey = []byte("minha_chave_secreta")
 
 var db *sql.DB
 
@@ -64,7 +73,6 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Hash da senha
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		http.Error(w, "Erro ao criar a senha", http.StatusInternalServerError)
@@ -72,7 +80,6 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	}
 	user.Password = string(hashedPassword)
 
-	// Verifica se o email já existe
 	var existingUserID int
 	err = db.QueryRow("SELECT id FROM users WHERE email = $1", user.Email).Scan(&existingUserID)
 	if err != nil && err != sql.ErrNoRows {
@@ -85,7 +92,6 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Insere o novo usuário
 	sqlStatement := `
         INSERT INTO users (username, email, password)
         VALUES ($1, $2, $3)
@@ -110,7 +116,7 @@ func authenticateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var storedPassword string
-	err = db.QueryRow("SELECT password FROM users WHERE email = $1", user.Email).Scan(&storedPassword)
+	err = db.QueryRow("SELECT password, username FROM users WHERE email = $1", user.Email).Scan(&storedPassword, &user.Username)
 	if err != nil {
 		http.Error(w, "Email ou senha incorretos", http.StatusUnauthorized)
 		return
@@ -122,8 +128,23 @@ func authenticateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Login realizado com sucesso!"))
+	expirationTime := time.Now().Add(24 * time.Hour)
+	claims := &Claims{
+		Username: user.Username,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: expirationTime.Unix(),
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, err := token.SignedString(jwtKey)
+	if err != nil {
+		http.Error(w, "Erro ao criar o token", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"token": tokenString})
 }
 
 // Manipulador para obter usuários
@@ -150,6 +171,34 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(users)
 }
 
+// Manipulador para verificar o token
+func verifyToken(w http.ResponseWriter, r *http.Request) {
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		http.Error(w, "Token não fornecido", http.StatusUnauthorized)
+		return
+	}
+
+	tokenString := authHeader[len("Bearer "):]
+
+	claims := &Claims{}
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		return jwtKey, nil
+	})
+
+	if err != nil {
+		http.Error(w, "Token inválido", http.StatusUnauthorized)
+		return
+	}
+
+	if !token.Valid {
+		http.Error(w, "Token inválido", http.StatusUnauthorized)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
 // Função para configurar e iniciar o servidor
 func routes() {
 	r := mux.NewRouter()
@@ -158,22 +207,24 @@ func routes() {
 	r.HandleFunc("/login", authenticateUser).Methods("POST")
 	r.HandleFunc("/api/posts", createPostHandler).Methods("POST")
 	r.HandleFunc("/api/posts", getAllPostsHandler).Methods("GET")
+	r.HandleFunc("/verify-token", verifyToken).Methods("POST")
 
+	// Configuração do CORS
 	c := cors.New(cors.Options{
-        AllowedOrigins:   []string{"http://localhost:3000"},
-        AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
-        AllowedHeaders:   []string{"Authorization", "Content-Type"},
-        AllowCredentials: true,
-    })
+		AllowedOrigins:   []string{"http://localhost:3000"}, // Permite apenas esta origem
+		AllowCredentials: true,
+		AllowedMethods:   []string{"GET", "POST", "PUT", "OPTIONS"}, // Adicione OPTIONS
+		AllowedHeaders:   []string{"Content-Type", "Authorization"}, // Adicione os cabeçalhos necessários
+	})
 
-    handler := c.Handler(r)
+	handler := c.Handler(r)
 
-    srv := &http.Server{
-        Handler:      handler,
-        Addr:         "0.0.0.0:8000",
-        WriteTimeout: 10 * time.Second,
-        ReadTimeout:  10 * time.Second,
-    }
+	srv := &http.Server{
+		Addr:         ":8000",
+		Handler:      handler,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
 
 	fmt.Println("Servidor iniciado na porta 8000")
 	log.Fatal(srv.ListenAndServe())

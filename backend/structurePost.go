@@ -20,7 +20,7 @@ type Post struct {
 }
 
 // Estrutura para o token JWT
-type Claims struct {
+type PostClaims struct {
 	Username string `json:"username"`
 	jwt.StandardClaims
 }

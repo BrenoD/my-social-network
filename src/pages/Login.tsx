@@ -1,7 +1,9 @@
 import "./UserLogin.css";
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 const Login: React.FC = () => {
+  const { login } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,8 +24,10 @@ const Login: React.FC = () => {
       });
 
       if (response.ok) {
+        const { token } = await response.json(); // Assumindo que o token JWT é retornado aqui
+        login(token); // Usando o contexto para definir o estado de autenticação
         alert('Login realizado com sucesso!');
-        // Redirecionar ou atualizar o estado conforme necessário
+        window.location.href = "/"; // Redireciona para o Feed
       } else {
         const errorData = await response.json();
         setError(errorData.message || 'Erro ao realizar login.');
