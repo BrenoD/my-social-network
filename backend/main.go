@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"io/ioutil" // Adicionei isso para uso de ioutil.ReadFile
 
 	"golang.org/x/crypto/bcrypt"
 	"github.com/dgrijalva/jwt-go"
@@ -40,7 +41,33 @@ const (
 )
 
 // Configuração do JWT
-var jwtKey = []byte("minha_chave_secreta")
+var jwtKey []byte
+
+type Config struct {
+	JWTKey string `json:"jwtKey"`
+}
+
+func loadConfig() (*Config, error) {
+	file, err := ioutil.ReadFile("config.json")
+	if err != nil {
+		return nil, err
+	}
+
+	var config Config
+	if err := json.Unmarshal(file, &config); err != nil {
+		return nil, err
+	}
+
+	return &config, nil
+}
+
+func init() {
+	config, err := loadConfig()
+	if err != nil {
+		log.Fatal("Erro ao carregar configuração: ", err)
+	}
+	jwtKey = []byte(config.JWTKey)
+}
 
 var db *sql.DB
 

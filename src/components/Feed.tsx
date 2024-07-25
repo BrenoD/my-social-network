@@ -96,7 +96,11 @@ const Feed: React.FC = () => {
       setError(null); // Limpa qualquer erro anterior
     } catch (error) {
       console.error("Erro ao criar postagem:", error);
-      setError("Erro ao criar postagem.");
+      if (error.response?.status === 401) {
+        setError('Token inválido ou expirado.');
+      } else {
+        setError('Erro ao criar postagem.');
+      }
     }
   };
 
@@ -106,7 +110,8 @@ const Feed: React.FC = () => {
         <h2 className="h2-postage">Feed</h2>
         {error && <p className="error-message">{error}</p>}
         <label className="label-postage">Postagem:</label>
-        <input id="input-postage"
+        <input
+          id="input-postage"
           type="text"
           className="form-control"
           name="textForFeed"

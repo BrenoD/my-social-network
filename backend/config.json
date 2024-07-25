@@ -1,0 +1,11 @@
+{
+    "jwtKey": "v9NzI5cWm8e7jb4ISbCVoxz3GcK5L2JXJVuEyoJr8aE=",
+    "db": {
+      "host": "localhost",
+      "port": 5432,
+      "user": "postgres",
+      "password": "brenodias10",
+      "dbname": "SocialNetwork"
+    }
+  }
+  
