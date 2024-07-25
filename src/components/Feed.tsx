@@ -7,6 +7,7 @@ interface Post {
   username: string;
   content: string;
   createdAt: string;
+  updatedAt: string;
 }
 
 const Feed: React.FC = () => {
@@ -35,7 +36,8 @@ const Feed: React.FC = () => {
             'Authorization': `Bearer ${token}`,
           }
         });
-        setPosts(response.data);
+        console.log('Resposta da API:', response.data); // Verifique o formato da resposta
+        setPosts(response.data || []); // Garante que posts nunca seja null
       } catch (error) {
         console.error("Erro ao buscar postagens:", error);
         if (error.response?.status === 401) {
@@ -60,6 +62,7 @@ const Feed: React.FC = () => {
       const response = await axios.post<Post>(
         "http://localhost:8000/api/posts",
         {
+          username: username, // Envia o nome do usuário logado
           content: newPostText
         },
         {
@@ -79,7 +82,7 @@ const Feed: React.FC = () => {
               'Authorization': `Bearer ${token}`,
             }
           });
-          setPosts(response.data);
+          setPosts(response.data || []); // Garante que posts nunca seja null
         } catch (error) {
           console.error("Erro ao buscar postagens:", error);
           if (error.response?.status === 401) {
@@ -121,13 +124,17 @@ const Feed: React.FC = () => {
         <button className="button-postage" onClick={handlePostSubmit}>Enviar</button>
       </div>
       <div className="contentFeed">
-        {posts.map((post) => (
-          <div key={post.id} className="post">
-            <p><strong>Usuário:</strong> {post.username}</p>
-            <p><strong>Hora:</strong> {new Date(post.createdAt).toLocaleString()}</p>
-            <p><strong>Conteúdo:</strong> {post.content}</p>
-          </div>
-        ))}
+        {posts.length > 0 ? (
+          posts.map((post) => (
+            <div key={post.id} className="post">
+              <p><strong>Usuário:</strong> {post.username}</p>
+              <p><strong>Hora:</strong> {new Date(post.createdAt).toLocaleString()}</p>
+              <p><strong></strong> {post.content}</p>
+            </div>
+          ))
+        ) : (
+          <p>Nenhuma postagem disponível.</p>
+        )}
       </div>
     </div>
   );

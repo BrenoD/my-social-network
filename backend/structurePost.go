@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"strings"
 	"time"
-	"io/ioutil" // Para ler o arquivo de configuração
+
 	"github.com/dgrijalva/jwt-go"
-	_ "github.com/lib/pq"
+	// "github.com/gorilla/mux"
 )
 
 // Estrutura de Postagem
@@ -23,21 +23,6 @@ type Post struct {
 type PostClaims struct {
 	Username string `json:"username"`
 	jwt.StandardClaims
-}
-
-// Função para carregar o arquivo de configuração
-func loadConfigs() (*Config, error) {
-	file, err := ioutil.ReadFile("config.json")
-	if err != nil {
-		return nil, err
-	}
-
-	var config Config
-	if err := json.Unmarshal(file, &config); err != nil {
-		return nil, err
-	}
-
-	return &config, nil
 }
 
 // Função para obter o nome do usuário do token JWT

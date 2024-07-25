@@ -24,8 +24,8 @@ const Login: React.FC = () => {
       });
 
       if (response.ok) {
-        const { token } = await response.json();
-        login(token); // Armazena o token e define o estado de autenticação
+        const { token } = await response.json(); // Assumindo que o token JWT é retornado aqui
+        login(token); // Usando o contexto para definir o estado de autenticação
         alert('Login realizado com sucesso!');
         window.location.href = "/"; // Redireciona para o Feed
       } else {
