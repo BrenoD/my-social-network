@@ -60,7 +60,6 @@ const Feed: React.FC = () => {
       const response = await axios.post<Post>(
         "http://localhost:8000/api/posts",
         {
-          username: username, // Envia o nome do usuário logado
           content: newPostText
         },
         {

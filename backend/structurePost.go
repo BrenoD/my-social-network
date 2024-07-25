@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"strings"
 	"time"
-
+	"io/ioutil" // Para ler o arquivo de configuração
 	"github.com/dgrijalva/jwt-go"
-	// "github.com/gorilla/mux"
+	_ "github.com/lib/pq"
 )
 
 // Estrutura de Postagem
@@ -25,6 +25,21 @@ type PostClaims struct {
 	jwt.StandardClaims
 }
 
+// Função para carregar o arquivo de configuração
+func loadConfigs() (*Config, error) {
+	file, err := ioutil.ReadFile("config.json")
+	if err != nil {
+		return nil, err
+	}
+
+	var config Config
+	if err := json.Unmarshal(file, &config); err != nil {
+		return nil, err
+	}
+
+	return &config, nil
+}
+
 // Função para obter o nome do usuário do token JWT
 func getUsernameFromToken(r *http.Request) (string, error) {
 	tokenString := r.Header.Get("Authorization")
@@ -35,7 +50,7 @@ func getUsernameFromToken(r *http.Request) (string, error) {
 	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
 
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte("suaChaveSecreta"), nil // Substitua com a sua chave secreta
+		return []byte("v9NzI5cWm8e7jb4ISbCVoxz3GcK5L2JXJVuEyoJr8aE="), nil // Substitua com a sua chave secreta
 	})
 
 	if err != nil {
