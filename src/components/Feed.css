@@ -14,9 +14,22 @@
 
 .contentFeed {
     padding: 20px 0px 0px 20px;
+    
 }
 
 #input-postage {
     width: 330px;
     padding-left: 10px;
+}
+
+.post {
+    background-color: rgb(236, 236, 236);
+    padding: 10px;
+    margin: 10px;
+    border-radius: 12px;
+}
+
+.postageUser {
+    display: flex;
+    justify-content: space-between;
 }

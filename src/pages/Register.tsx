@@ -51,6 +51,7 @@ const Register: React.FC = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
+            placeholder="Escreva Seu Nome Completo"
           />
         </label>
         <label>

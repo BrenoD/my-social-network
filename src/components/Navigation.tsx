@@ -1,18 +1,25 @@
-import React from "react"
-import "./Navegation.css"
+import React, { useContext } from "react";
+import { AuthContext } from "../context/AuthContext"; // Ajuste o caminho conforme necessário
+import "./Navegation.css";
 
-interface NaverProps {
-    // Defina as props aqui, se houver alguma
-  }
-  
-  const Navegation: React.FC<NaverProps> = () => (
+const Navegation: React.FC = () => {
+  const { logout } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logout();
+    window.location.href = "/Login"; // Redireciona para a página de login após logout
+  };
+
+  return (
     <div className="leftNavegation">
       <div className="grid">
-        <button className="profile">Perfil</button>
+        <button className="profile"><a href="/Profile">Perfil</a></button>
         <button className="config">Configuração</button>
         <button className="about">Sobre</button>
-        </div>
+        <button className="logout" onClick={handleLogout}>Sair</button>
+      </div>
     </div>
-  )
+  );
+};
 
-  export default Navegation
+export default Navegation;

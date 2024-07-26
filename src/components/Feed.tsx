@@ -13,7 +13,6 @@ interface Post {
 const Feed: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [newPostText, setNewPostText] = useState("");
-  const [username, setUsername] = useState(""); // Armazena o nome do usuário logado
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -26,11 +25,7 @@ const Feed: React.FC = () => {
       }
 
       try {
-        // Decodifica o token para obter o nome de usuário
-        const user = JSON.parse(atob(token.split('.')[1]));
-        setUsername(user.username); // Supondo que o nome do usuário esteja no payload do token
-
-        // Busca as postagens
+        // Busca as postagens de todos os usuários
         const response = await axios.get<Post[]>("http://localhost:8000/api/posts", {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -62,8 +57,7 @@ const Feed: React.FC = () => {
       const response = await axios.post<Post>(
         "http://localhost:8000/api/posts",
         {
-          username: username, // Envia o nome do usuário logado
-          content: newPostText
+          content: newPostText // Envia apenas o conteúdo da nova postagem
         },
         {
           headers: {
@@ -127,9 +121,11 @@ const Feed: React.FC = () => {
         {posts.length > 0 ? (
           posts.map((post) => (
             <div key={post.id} className="post">
+              <div className="postageUser">
               <p><strong>{post.username}</strong></p>
               <p><strong>Hora:</strong> {new Date(post.createdAt).toLocaleString()}</p>
-              <p><strong></strong> {post.content}</p>
+              </div>
+              <p><strong>Conteúdo:</strong> {post.content}</p>
             </div>
           ))
         ) : (

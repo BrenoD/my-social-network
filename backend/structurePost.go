@@ -84,15 +84,16 @@ func createPostHandler(w http.ResponseWriter, r *http.Request) {
 
 // Manipulador para obter todas as postagens
 func getAllPostsHandler(w http.ResponseWriter, r *http.Request) {
-	// Obter o nome de usuário do token
-	username, err := getUsernameFromToken(r)
+	// Você não precisa verificar o token para obter todas as postagens, 
+	// mas pode querer garantir que o usuário esteja autenticado.
+	_, err := getUsernameFromToken(r)
 	if err != nil {
 		http.Error(w, "Não autorizado", http.StatusUnauthorized)
 		return
 	}
 
-	// Consulta postagens associadas ao usuário autenticado
-	rows, err := db.Query("SELECT username, content, created_at FROM posts WHERE username = $1", username)
+	// Consulta todas as postagens
+	rows, err := db.Query("SELECT id, username, content, created_at FROM posts")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -102,7 +103,7 @@ func getAllPostsHandler(w http.ResponseWriter, r *http.Request) {
 	var posts []Post
 	for rows.Next() {
 		var post Post
-		err := rows.Scan(&post.Username, &post.Content, &post.CreatedAt)
+		err := rows.Scan(&post.ID, &post.Username, &post.Content, &post.CreatedAt)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -114,3 +115,4 @@ func getAllPostsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(posts)
 }
+
