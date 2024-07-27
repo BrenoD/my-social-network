@@ -1,35 +1,97 @@
+/* Feed.css */
 
-
-.feedPost {
-    background-color: rgb(207, 207, 207);
-    height: 12vh;
-    width: 80vw;
-}
-
-.h2-postage, .label-postage, #input-postage, .button-postage {
+/* Estilo geral do feed */
+.totalFeed {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  
+  /* Estilo da div que contém a postagem */
+  .feedPost {
+    background-color: rgb(255, 255, 255);
+    height: auto; /* Alterado para auto para ajustar a altura conforme o conteúdo */
+    width: 80vw;
+    max-width: 800px; /*Adicionando max-width para limitar a largura máxima*/
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.171);
+    margin: 20px; /* Adicionando margem para espaçamento vertical */
+  }
+  
+  /* Estilo do título da postagem */
+  .h2-postage {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* Adicionando margem inferior para espaçamento */
+  }
+  
+  /* Estilo do ícone do FontAwesome */
+  .icon {
+    margin-right: 10px;
+    color: #263646;
+    height: 20px;
+    width: 20px;
+    background-color: #9cb1c5;
+    border-radius: 50px;
+    padding: 7px;
+  }
+  
+  /* Estilo dos elementos dentro da div feedPost */
+  .label-postage, #input-postage, .button-postage {
     margin-left: 20px;
-}
-
-.contentFeed {
+    margin-bottom: 10px; /* Adicionando margem inferior para espaçamento */
+  }
+  
+  /* Estilo da div que contém o feed de conteúdo */
+  .contentFeed {
+    width: 80vw;
+    max-width: 800px;
     padding: 20px 0px 0px 20px;
-    
-}
+    background-color: rgb(243, 243, 243); /* Alterar cor de fundo conforme necessário */
+    border-radius: 10px;
+    box-shadow: 0px 5px 5px -5px rgba(0, 0, 0, 0.171);
+  }
+  
+  .button-postage:hover {
+    background-color: #9cb1c5;
+    padding: 0px 15px 0px 15px;
+    border-radius: 15px;
+  }
 
-#input-postage {
+  /* Estilo do input de postagem */
+  #input-postage {
     width: 330px;
+    height: 30px;
     padding-left: 10px;
-}
-
-.post {
-    background-color: rgb(236, 236, 236);
-    padding: 10px;
-    margin: 10px;
+    border-radius: 20px;
+    background-color: rgb(233, 233, 233);
+  }
+  
+  /* Estilo do input de postagem ao passar o mouse */
+  #input-postage:hover {
+    background-color: rgb(216, 216, 216);
+  }
+  
+  /* Estilo de cada postagem */
+  .post {
+    background-color: rgb(255, 255, 255);
+    padding: 15px;
+    margin: 16px;
     border-radius: 12px;
-}
-
-.postageUser {
+    box-shadow: 0px 5px 5px -5px rgba(0, 0, 0, 0.349);
+  }
+  
+  /* Estilo da div que contém o usuário da postagem */
+  .postageUser {
     display: flex;
     justify-content: space-between;
-}
+  }
+  
+  /* Estilo da mensagem de erro */
+  .error-message {
+    color: red;
+    margin-left: 20px;
+  }
+  

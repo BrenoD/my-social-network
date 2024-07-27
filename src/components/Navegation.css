@@ -1,8 +1,9 @@
 .leftNavegation {
-    background-color: rgb(195, 220, 252);
+    background-color: rgb(255, 255, 255);
     height: 100vh;
-    width: 27vw;
-    box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.103);
+    width: 160px;
+    min-width: 150px;
+    box-shadow: 5px 0px 5px -5px rgba(0, 0, 0, 0.171);
 }
 
 .grid {
@@ -20,6 +21,10 @@
 }
 
 button:hover {
-    background-color: rgb(228, 240, 255);
+    background-color: #9cb1c5;
     box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.342);
 }
+
+/* .iconUser, .iconConfig, .iconAbout, iconLeave {
+    white-space: nowrap;
+} */

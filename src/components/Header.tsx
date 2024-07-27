@@ -1,16 +1,11 @@
 import React from 'react';
 import './Header.css';
-import Image from 'next/image'
+import Image from 'next/image';
 
-
-interface HeaderProps {
-  // Defina as props aqui, se houver alguma
-}
-
-const Header: React.FC<HeaderProps> = () => (
+const Header: React.FC = () => (
   <header>
     <aside>
-      <Image src="/images/logoKartus.png" alt="logoKartus" width={300} height={300} />
+      <Image src="/images/logoKartus.png" alt="logoKartus" width={140} height={50} />
     </aside>
     <div className="navegation">
       <a href="/">Feed</a>

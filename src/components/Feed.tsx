@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import "./Feed.css";
 
 interface Post {
@@ -103,7 +105,7 @@ const Feed: React.FC = () => {
   return (
     <div className="totalFeed">
       <div className="feedPost">
-        <h2 className="h2-postage">Feed</h2>
+        <h2 className="h2-postage"><FontAwesomeIcon icon={faPlus} className="icon"/>Feed</h2>
         {error && <p className="error-message">{error}</p>}
         <label className="label-postage">Postagem:</label>
         <input
