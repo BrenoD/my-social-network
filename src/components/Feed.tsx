@@ -102,10 +102,40 @@ const Feed: React.FC = () => {
     }
   };
 
+
+  const handleDeletePost = async (postId: number) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('Usuário não autenticado.');
+      return;
+    }
+
+    try {
+      await axios.delete(`http://localhost:8000/api/posts/${postId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        }
+      });
+      // Atualiza a lista de postagens após a exclusão
+      setPosts(posts.filter(post => post.id !== postId));
+      setError(null);
+    } catch (error) {
+      console.error("Erro ao excluir postagem:", error);
+      if (error.response?.status === 401) {
+        setError('Token inválido ou expirado.');
+      } else {
+        setError('');
+      }
+    }
+  };
+
+  // No retorno do JSX, adicione o botão de exclusão para cada postagem
   return (
     <div className="totalFeed">
       <div className="feedPost">
-        <h2 className="h2-postage"><FontAwesomeIcon icon={faPlus} className="icon"/>Feed</h2>
+        <h2 className="h2-postage">
+          <FontAwesomeIcon icon={faPlus} className="icon" /> Feed
+        </h2>
         {error && <p className="error-message">{error}</p>}
         <label className="label-postage">Postagem:</label>
         <input
@@ -121,13 +151,14 @@ const Feed: React.FC = () => {
       </div>
       <div className="contentFeed">
         {posts.length > 0 ? (
-          posts.map((post) => (
+          posts.slice().reverse().map((post) => (
             <div key={post.id} className="post">
               <div className="postageUser">
-              <p><strong>{post.username}</strong></p>
-              <p><strong>Hora:</strong> {new Date(post.createdAt).toLocaleString()}</p>
+                <p><strong>{post.username}</strong></p>
+                <p><strong>Hora:</strong> {new Date(post.createdAt).toLocaleString()}</p>
               </div>
               <p><strong>Conteúdo:</strong> {post.content}</p>
+              <button onClick={() => handleDeletePost(post.id)} className="button-delete">Excluir</button>
             </div>
           ))
         ) : (
@@ -136,6 +167,6 @@ const Feed: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
-export default Feed;
+  export default Feed;

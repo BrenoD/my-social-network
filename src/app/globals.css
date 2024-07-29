@@ -11,6 +11,10 @@
     0 2px 49px 0 rgba(0, 0, 0,0.06) 
 }
 
+*{
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
 .homeFeed {
   display: flex;
 }

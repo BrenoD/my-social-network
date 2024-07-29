@@ -16,6 +16,8 @@ img {
     width: 140px;
 }
 
-a {
+#navHeader {
     padding: 10px;
+    color: aliceblue;
+    text-decoration: none;
 }

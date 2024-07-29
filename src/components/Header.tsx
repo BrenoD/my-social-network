@@ -8,11 +8,11 @@ const Header: React.FC = () => (
       <Image src="/images/logoKartus.png" alt="logoKartus" width={140} height={50} />
     </aside>
     <div className="navegation">
-      <a href="/">Feed</a>
+      <a href="/" id='navHeader'>Feed</a>
     </div>
     <div className="log">
-      <a href="/Login">Login</a>
-      <a href="/Register">Registrar</a>
+      <a href="/Login" id='navHeader'>Login</a>
+      <a href="/Register" id='navHeader'>Registrar</a>
     </div>
   </header>
 );

@@ -23,8 +23,18 @@
 button:hover {
     background-color: #9cb1c5;
     box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.342);
+    border: 0px;
+}
+
+button {
+    border: none;
+    background-color: white;
 }
 
 /* .iconUser, .iconConfig, .iconAbout, iconLeave {
     white-space: nowrap;
 } */
+
+#nav {
+    color: black;
+}
