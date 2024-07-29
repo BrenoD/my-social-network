@@ -1,19 +1,20 @@
 package main
 
 import (
+	// Adicionei isso para uso de ioutil.ReadFile
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
-	"io/ioutil" // Adicionei isso para uso de ioutil.ReadFile
 
-	"golang.org/x/crypto/bcrypt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 	"github.com/rs/cors"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // Estrutura de Usuário
@@ -36,8 +37,8 @@ const (
 	host     = "localhost"
 	port     = 5432
 	user     = "postgres"
-	password = "brenodias10"
-	dbname   = "SocialNetwork"
+	password = "postgres"
+	dbname   = "postgres"
 )
 
 // Configuração do JWT
@@ -212,7 +213,6 @@ func verifyToken(w http.ResponseWriter, r *http.Request) {
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
-
 	if err != nil {
 		http.Error(w, "Token inválido", http.StatusUnauthorized)
 		return
