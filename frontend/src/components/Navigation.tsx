@@ -16,10 +16,10 @@ const Navegation: React.FC = () => {
     <div className="leftNavegation">
       <div className="grid">
         <button className="profile">
-          <a href="/Profile"><FontAwesomeIcon icon={faUser} className="iconUser"/> Perfil</a>
+          <a href="/Profile" id='nav'><FontAwesomeIcon icon={faUser} className="iconUser"/> Perfil</a>
         </button>
         <button className="config">
-          <FontAwesomeIcon icon={faCog} className="iconConfig"/> Configuração
+          <a href="/Configuration" id='nav'><FontAwesomeIcon icon={faCog} className="iconConfig"/> Configuração</a>
         </button>
         <button className="about">
           <FontAwesomeIcon icon={faInfoCircle} className="iconAbout"/> Sobre

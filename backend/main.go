@@ -1,7 +1,6 @@
 package main
 
 import (
-	// Adicionei isso para uso de ioutil.ReadFile
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -29,6 +28,7 @@ type User struct {
 // Estrutura para Claims do JWT
 type Claims struct {
 	Username string `json:"username"`
+	UserID   int    `json:"user_id"`
 	jwt.StandardClaims
 }
 
@@ -144,7 +144,8 @@ func authenticateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var storedPassword string
-	err = db.QueryRow("SELECT password, username FROM users WHERE email = $1", user.Email).Scan(&storedPassword, &user.Username)
+	var userID int
+	err = db.QueryRow("SELECT id, password, username FROM users WHERE email = $1", user.Email).Scan(&userID, &storedPassword, &user.Username)
 	if err != nil {
 		http.Error(w, "Email ou senha incorretos", http.StatusUnauthorized)
 		return
@@ -159,6 +160,7 @@ func authenticateUser(w http.ResponseWriter, r *http.Request) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
 		Username: user.Username,
+		UserID:   userID,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
@@ -234,14 +236,15 @@ func routes() {
 	r.HandleFunc("/login", authenticateUser).Methods("POST")
 	r.HandleFunc("/api/posts", createPostHandler).Methods("POST")
 	r.HandleFunc("/api/posts", getAllPostsHandler).Methods("GET")
+	r.HandleFunc("/api/posts/{id:[0-9]+}", deletePostHandler).Methods("DELETE")
 	r.HandleFunc("/verify-token", verifyToken).Methods("POST")
 
 	// Configuração do CORS
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000"}, // Permite apenas esta origem
+		AllowedOrigins:   []string{"http://localhost:3000"},
 		AllowCredentials: true,
-		AllowedMethods:   []string{"GET", "POST", "PUT", "OPTIONS"}, // Adicione OPTIONS
-		AllowedHeaders:   []string{"Content-Type", "Authorization"}, // Adicione os cabeçalhos necessários
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
 	})
 
 	handler := c.Handler(r)
@@ -257,8 +260,7 @@ func routes() {
 	log.Fatal(srv.ListenAndServe())
 }
 
-// Função principal que configura e inicia o servidor
 func main() {
-	initDB() // Inicializa a conexão com o banco de dados
-	routes() // Configura e inicia o servidor
+	initDB()
+	routes()
 }
