@@ -1,63 +1,64 @@
 * {
     margin: 0px;
-    padding: 0px;
-    text-decoration: none;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-.leftNavegation {
-    background-color: rgb(195, 220, 252);
-    height: 100vh;
-    width: 19vw;
-    box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.103);
-}
-
-.grid {
-    padding-top: 20px;
-    display: grid;
-    grid-template-rows: auto;
-    row-gap: 40px;
-}
-
-.grid button {
-    text-align: left; 
-    width: 100%; 
-    padding: 10px;
-    /* box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.342); */
-}
-
-button {
-    background-color: rgb(195, 220, 252);
-    border: none;
-}
-
-button:hover {
-    background-color: rgb(228, 240, 255);
-    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.342);
-}
-
-header {
-    background-color: rgb(45, 74, 128);
+.area-nav-and-profilecontent {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    min-height: 60px;
+}
+
+.profile-area {
+    margin: 20px;
     padding: 20px;
-    box-shadow: 0px 3.2px 3px rgba(0, 0, 0, 0.24);
+    height: 40vh;
+    width: 700px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.171);
+}
+
+.img-background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 90px;
+    background-color: rgb(245, 245, 245);
+    color: rgb(245, 245, 245);
+    width: 100%;
+    height: 60%;
+    border-radius: 10px;
+}
+
+.img-profile {
     position: relative;
-    z-index: 10;
+    z-index: 2;
+    background-color: rgb(255, 255, 255);
+    color: rgb(255, 255, 255);
+    height: 90px;
+    width: 90px;
+    border-radius: 70px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 30px;
+    margin-left: 30px;
+    top: 50%;
+    /* Centraliza verticalmente */
+    transform: translateY(-50%);
+    /* Ajusta a centralização */
 }
 
-img {
-    height: 50px;
-    width: 140px;
+.img-profilecontent {
+    display: flex;
+    align-items: center;
+    position: relative;
 }
 
-a {
-    padding: 10px;
-    color: aliceblue;
-}
+.content-feed-profile {
 
-.Profile {
-    color: black;
+    background-color: rgb(255, 255, 255);
+    padding: 15px;
+    margin: 16px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 5px -5px rgba(0, 0, 0, 0.349);
 }
