@@ -1,10 +1,7 @@
 'use client';
 
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "context/AuthContext";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
@@ -12,10 +9,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <AuthProvider>
+    <AuthProvider >
       <html lang="en">
-      <link rel="icon" href="/favicon.ico" />
-        <body className={inter.className}>{children}</body>
+        <link rel="icon" href="/favicon.ico" />
+        <body>{children}</body>
       </html>
     </AuthProvider>
   );
