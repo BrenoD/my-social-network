@@ -39,3 +39,9 @@ CREATE TABLE posts (
 
 ## License 📜<br />
 This project is licensed under the MIT License. See the LICENSE file for details.<br />
+<br />
+## Author 📝
+Breno Dias Rodrigues<br />
+Curriculum: https://brenod.github.io/curriculum/<br />
+Email: dias2579@gmail.com
+
