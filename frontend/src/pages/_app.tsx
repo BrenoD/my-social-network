@@ -6,7 +6,7 @@ const poppins = Poppins({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-poppins',
-  weight: ['300', '600']
+  weight: ['300', '400', '500', '600']
 })
 
 export default function MyApp({ Component, pageProps }: AppProps) {

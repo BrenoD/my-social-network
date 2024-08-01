@@ -14,6 +14,7 @@
     "axios": "^1.7.2",
     "gitmoji-cli": "^9.4.0",
     "jwt-decode": "^4.0.0",
+    "material-symbols": "^0.21.2",
     "next": "14.2.5",
     "next-images": "^1.8.5",
     "react": "^18",
