@@ -11,11 +11,11 @@ import (
 	"os"
 	"time"
 
-	"golang.org/x/crypto/bcrypt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
-	"github.com/rs/cors"
 	_ "github.com/lib/pq"
+	"github.com/rs/cors"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // Estrutura de Usuário
@@ -39,8 +39,8 @@ const (
 	host     = "localhost"
 	port     = 5432
 	user     = "postgres"
-	password = "brenodias10"
-	dbname   = "SocialNetwork"
+	password = "postgres"
+	dbname   = "postgres"
 )
 
 // Configuração do JWT
@@ -220,7 +220,6 @@ func verifyToken(w http.ResponseWriter, r *http.Request) {
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
-
 	if err != nil {
 		http.Error(w, "Token inválido", http.StatusUnauthorized)
 		return

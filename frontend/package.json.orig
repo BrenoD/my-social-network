@@ -12,8 +12,15 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "axios": "^1.7.2",
+<<<<<<< HEAD:package.json
     "gitmoji-cli": "^9.4.0",
     "jwt-decode": "^4.0.0",
+||||||| 4cf1d95:package.json
+=======
+    "gitmoji-cli": "^9.4.0",
+    "jwt-decode": "^4.0.0",
+    "material-symbols": "^0.21.2",
+>>>>>>> origin/dev:frontend/package.json
     "next": "14.2.5",
     "next-images": "^1.8.5",
     "react": "^18",
@@ -26,8 +33,9 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.40",
+    "tailwindcss": "^3.4.7",
     "typescript": "^5"
   }
 }

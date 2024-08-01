@@ -1,0 +1,30 @@
+services:
+  go-app:
+    volumes:
+      - ./backend/:app
+    container_name: go-app
+    image: golang:1.22.4
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+        DATABASE_URL: "host=db user=postgres password=postgres dbname=postgres sslmode=disable"
+    ports:
+      - "3333:3333"
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: postgres:12
+    environment:
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_USER: postgres
+        POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}

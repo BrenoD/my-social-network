@@ -1,0 +1,27 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    text-decoration: none;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.area-account-nav {
+    display: flex;
+}
+
+.area-account {
+    margin: 17px;
+    padding: 14px;
+    width: 86vw;
+    background-color: rgb(243, 243, 243); /* Alterar cor de fundo conforme necessário */
+    border-radius: 10px;
+    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.171);
+}
+
+.data-user {
+    background-color: rgb(255, 255, 255);
+    padding: 15px;
+    margin: 16px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 5px -5px rgba(0, 0, 0, 0.349);
+}
