@@ -3,7 +3,7 @@ import "./Configuration.css"
 import Header from "../components/Header"
 import Navegation from "../components/Navigation";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faKey } from '@fortawesome/free-solid-svg-icons';
+import { faKey, faShieldHalved, faHeart } from '@fortawesome/free-solid-svg-icons';
 
 const Configuration: React.FC = () => {
     return (
@@ -15,9 +15,9 @@ const Configuration: React.FC = () => {
             <div className="Navegation">
                 <Navegation />
                 <div className="navConfig">
-                <a href="/Account" className="navAccount"><FontAwesomeIcon icon={faKey} className="iconKey"/>Conta</a>
-                <a href="/Privacy" className="navPrivacy">Privacidade</a>
-                <a href="/recentLike" className="navRecentLike">Curtidas Recente</a>
+                <a href="/Account/Account" className="navAccount"><FontAwesomeIcon icon={faKey} className="iconKey"/>Conta</a>
+                <a href="/Privacy/Privacy" className="navPrivacy"><FontAwesomeIcon icon={faShieldHalved} className="iconKey"/>Privacidade</a>
+                <a href="/recentLike" className="navRecentLike"><FontAwesomeIcon icon={faHeart} className="iconKey"/>Curtidas Recente</a>
                 </div>
             </div>
         </div>
