@@ -20,13 +20,11 @@ import (
 
 // Estrutura de Usuário
 type User struct {
-	ID                int    `json:"id"`
-	Username          string `json:"username"`
-	Email             string `json:"email"`
-	Password          string `json:"password"`
-	ProfilePictureUrl string `json:"profilePictureUrl"`
-	CoverPhotoUrl     string `json:"coverPhotoUrl"`
-	CreatedAt         string `json:"created_at"`
+	ID        int    `json:"id"`
+	Username  string `json:"username"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	CreatedAt string `json:"created_at"`
 }
 
 // Estrutura para Claims do JWT
@@ -139,7 +137,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func getUsers(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.Query("SELECT id, username, email, profile_picture_url, cover_photo_url, created_at FROM users")
+	rows, err := db.Query("SELECT id, username, email, created_at FROM users")
 	if err != nil {
 		http.Error(w, "Erro ao buscar usuários", http.StatusInternalServerError)
 		return
@@ -149,7 +147,7 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 	var users []User
 	for rows.Next() {
 		var user User
-		if err := rows.Scan(&user.ID, &user.Username, &user.Email, &user.ProfilePictureUrl, &user.CoverPhotoUrl, &user.CreatedAt); err != nil {
+		if err := rows.Scan(&user.ID, &user.Username, &user.Email, &user.CreatedAt); err != nil {
 			http.Error(w, "Erro ao ler dados dos usuários", http.StatusInternalServerError)
 			return
 		}
@@ -244,7 +242,6 @@ func uploadImageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	imageType := mux.Vars(r)["imageType"]
-	userID := mux.Vars(r)["userID"]
 	err := r.ParseMultipartForm(10 << 20) // Limite de 10MB
 	if err != nil {
 		http.Error(w, "Erro ao fazer o parsing do formulário", http.StatusBadRequest)
@@ -259,7 +256,7 @@ func uploadImageHandler(w http.ResponseWriter, r *http.Request) {
 	defer file.Close()
 
 	// Gerar um nome único para o arquivo
-	fileName := fmt.Sprintf("%d_%s_%s.jpg", time.Now().UnixNano(), userID, imageType)
+	fileName := fmt.Sprintf("%d_%s.jpg", time.Now().UnixNano(), imageType)
 	filePath := fmt.Sprintf("./public/uploads/%s/%s", imageType, fileName)
 
 	// Cria o diretório se não existir
@@ -282,47 +279,70 @@ func uploadImageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Atualizar o caminho da imagem no banco de dados
-	var column string
-	if imageType == "profile" {
-		column = "profile_picture_url"
-	} else if imageType == "background" {
-		column = "cover_photo_url"
-	} else {
-		http.Error(w, "Tipo de imagem inválido", http.StatusBadRequest)
-		return
-	}
-
-	sqlStatement := fmt.Sprintf("UPDATE users SET %s = $1 WHERE id = $2", column)
-	_, err = db.Exec(sqlStatement, filePath, userID)
-	if err != nil {
-		http.Error(w, "Erro ao atualizar o banco de dados", http.StatusInternalServerError)
-		return
-	}
-
 	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Arquivo carregado com sucesso"))
 }
 
-func main() {
-	initDB()
+// Manipulador para obter a imagem do usuário
+func getUserImageHandler(w http.ResponseWriter, r *http.Request) {
+	imageType := mux.Vars(r)["imageType"]
+	userID := mux.Vars(r)["userID"]
 
+	filePath := fmt.Sprintf("./public/uploads/%s/%s_%s.jpg", imageType, userID, imageType)
+
+	http.ServeFile(w, r, filePath)
+}
+
+// Função para configurar as rotas e iniciar o servidor
+func routes() {
 	r := mux.NewRouter()
-
 	r.HandleFunc("/users", createUser).Methods("POST")
 	r.HandleFunc("/users", getUsers).Methods("GET")
 	r.HandleFunc("/login", authenticateUser).Methods("POST")
-	r.HandleFunc("/verify-token", verifyToken).Methods("GET")
-
-	r.HandleFunc("/upload/{imageType}/{userID}", uploadImageHandler).Methods("POST")
+	r.HandleFunc("/api/posts", createPostHandler).Methods("POST")
+	r.HandleFunc("/api/posts", getAllPostsHandler).Methods("GET")
+	r.HandleFunc("/api/posts/{id:[0-9]+}", deletePostHandler).Methods("DELETE")
+	r.HandleFunc("/verify-token", verifyToken).Methods("POST")
+	r.HandleFunc("/upload/{imageType}", uploadImageHandler).Methods("POST")
+	r.HandleFunc("/api/users/{userID}/{imageType}-image", getUserImageHandler).Methods("GET")
 
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders: []string{"*"},
+		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowCredentials: true,
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
 	})
 
 	handler := c.Handler(r)
 
-	fmt.Println("Servidor iniciado na porta 8080")
-	log.Fatal(http.ListenAndServe(":8080", handler))
+	srv := &http.Server{
+		Addr:         ":8000",
+		Handler:      handler,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+
+	fmt.Println("Servidor iniciado na porta 8000")
+	log.Fatal(srv.ListenAndServe())
+}
+
+func main() {
+	// Inicializa a conexão com o banco de dados
+	initDB()
+
+	// Certificar-se de que o diretório de uploads existe
+	if _, err := os.Stat("./public/uploads/profile"); os.IsNotExist(err) {
+		err := os.MkdirAll("./public/uploads/profile", os.ModePerm)
+		if err != nil {
+			log.Fatalf("Erro ao criar diretório de uploads: %v", err)
+		}
+	}
+	if _, err := os.Stat("./public/uploads/background"); os.IsNotExist(err) {
+		err := os.MkdirAll("./public/uploads/background", os.ModePerm)
+		if err != nil {
+			log.Fatalf("Erro ao criar diretório de uploads: %v", err)
+		}
+	}
+
+	routes()
 }
